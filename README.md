@@ -66,19 +66,14 @@ The app allows users to:
 - Receive suggested business actions  
 
 ---
-
 ## ⚙️ How to Run the App
 
-### 1. Install dependencies
+Follow these steps to run the project locally:
+
+### 1. Clone the repository
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/SalmaMork/customer-churn-prediction.git
+cd customer-churn-prediction
 
-### 2. Run the Streamlit app
-```bash
 
-streamlit run app.py
 
-http://localhost:8501
-
-👩‍💻 Author
-Salma Morkani
