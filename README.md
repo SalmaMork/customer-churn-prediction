@@ -74,6 +74,24 @@ Follow these steps to run the project locally:
 ```bash
 git clone https://github.com/SalmaMork/customer-churn-prediction.git
 cd customer-churn-prediction
+```
+### 2. Run the Streamlit app
+```bash
+streamlit run app.py
+```
+### 3. Open in browser
+```bash
+http://localhost:8501
+```
+## 🛠️ Tech Stack
+Python
+Pandas
+NumPy
+Scikit-learn
+Matplotlib / Seaborn
+Streamlit
+Joblib
 
-
-
+---
+👩‍💻 Author
+Salma Morkani
