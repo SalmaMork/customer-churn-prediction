@@ -1,4 +1,4 @@
-# Customer Churn Prediction Dashboard
+# 📊 Customer Churn Prediction Dashboard
 
 🚀 This project presents a machine learning-powered Streamlit dashboard to predict customer churn and support business retention strategies.
 
@@ -9,13 +9,14 @@
 This project analyzes telecom customer behavior and predicts whether a customer is likely to churn.
 
 It combines:
-- Data cleaning and preprocessing
-- Exploratory Data Analysis (EDA)
-- Machine learning modeling (Logistic Regression)
-- Model improvement using scaling and class balancing
-- An interactive Streamlit dashboard
 
-The goal is to help businesses identify at-risk customers and take proactive actions.
+- Data cleaning and preprocessing  
+- Exploratory Data Analysis (EDA)  
+- Machine learning modeling (Logistic Regression)  
+- Model improvement using scaling and class balancing  
+- An interactive Streamlit dashboard  
+
+👉 The goal is to help businesses identify at-risk customers and take proactive actions.
 
 ---
 
@@ -24,9 +25,10 @@ The goal is to help businesses identify at-risk customers and take proactive act
 Customer churn leads to revenue loss and increased acquisition costs.
 
 This project helps answer:
-- Which customers are most likely to churn?
-- What factors influence churn?
-- How can we detect at-risk customers early?
+
+- Which customers are most likely to churn?  
+- What factors influence churn?  
+- How can we detect at-risk customers early?  
 
 ---
 
@@ -42,14 +44,14 @@ This project helps answer:
 
 ## 🤖 Machine Learning Model
 
-- Model: Logistic Regression  
+- Model: **Logistic Regression**  
 - Features: Customer demographics and billing data  
 
-### Initial Model
+### 📍 Initial Model
 - Accuracy: ~79%  
 - Churn Recall: ~52%  
 
-### Improved Model
+### 📍 Improved Model
 - Accuracy: ~73%  
 - Churn Recall: ~79%  
 
@@ -60,12 +62,14 @@ This project helps answer:
 ## 🌐 Streamlit Dashboard
 
 The app allows users to:
+
 - Input customer information  
 - Predict churn probability  
 - View risk level (Low / Moderate / High)  
 - Receive suggested business actions  
 
 ---
+
 ## ⚙️ How to Run the App
 
 Follow these steps to run the project locally:
