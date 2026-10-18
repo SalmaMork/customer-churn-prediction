@@ -69,6 +69,15 @@ The target variable is **Churn**, indicating whether a customer left the company
 👉 The improved model prioritizes **recall**, ensuring more at-risk customers are identified, which is more valuable from a business perspective.
 
 ---
+## ⚠️ Model Limitations
+
+- The model was trained on the Telco Customer Churn dataset and may not generalize to other telecom providers or customer populations.
+- Class balancing improves the model's ability to identify churners, but can increase false-positive predictions.
+- Predicted churn probabilities have not been independently calibrated.
+- The dashboard's Low, Moderate, and High risk categories use illustrative thresholds, not validated business decision rules.
+- The model is intended as a demonstration of machine learning for customer retention, not as a production-ready decision system.
+
+---
 
 ## 🌐 Streamlit Dashboard
 
