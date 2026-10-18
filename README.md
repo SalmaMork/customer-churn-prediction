@@ -31,6 +31,17 @@ This project helps answer:
 - How can we detect at-risk customers early?  
 
 ---
+## 🗂️ Dataset
+
+This project uses the **Telco Customer Churn** dataset, containing information about approximately 7,000 telecom customers.
+
+The dataset includes customer demographics, subscription services, contract types, tenure, monthly charges, total charges, and churn status.
+
+After data cleaning, **7,032 customer records** were retained for analysis and modeling.
+
+The target variable is **Churn**, indicating whether a customer left the company.
+
+The project uses one-hot encoding for categorical variables and a stratified-independent evaluation should be considered for future improvements.
 
 ## 📊 Key Insights
 
