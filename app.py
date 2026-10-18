@@ -1,70 +1,171 @@
+
 import streamlit as st
 import pandas as pd
 import joblib
 
-# load model, scaler, and columns
-model = joblib.load("model.pkl")
-scaler = joblib.load("scaler.pkl")
-model_columns = joblib.load("columns.pkl")
+st.set_page_config(
+    page_title="Customer Churn Prediction",
+    layout="centered"
+)
 
-# page config
-st.set_page_config(page_title="Churn Dashboard", layout="centered")
+@st.cache_resource
+def load_artifacts():
+    return (
+        joblib.load("model.pkl"),
+        joblib.load("scaler.pkl"),
+        joblib.load("columns.pkl"),
+    )
 
-# title
-st.title("Customer Churn Prediction Dashboard")
-st.write("Predict customer churn and support retention decisions using machine learning.")
+model, scaler, model_columns = load_artifacts()
 
-# -----------------------
-# USER INPUTS
-# -----------------------
+st.title("📊 Customer Churn Prediction")
+st.write(
+    "Estimate customer churn risk using a trained "
+    "logistic regression model."
+)
 
-tenure = st.slider("Tenure (months)", 0, 72, 12)
-monthly_charges = st.number_input("Monthly Charges", 0.0, 200.0, 50.0)
-total_charges = st.number_input("Total Charges", 0.0, 10000.0, 1000.0)
-senior = st.selectbox("Senior Citizen", [0, 1])
+st.subheader("Customer information")
 
-# -----------------------
-# CREATE INPUT DATA
-# -----------------------
+col1, col2 = st.columns(2)
 
-input_data = pd.DataFrame({
-    "SeniorCitizen": [senior],
-    "tenure": [tenure],
-    "MonthlyCharges": [monthly_charges],
-    "TotalCharges": [total_charges]
-})
+with col1:
+    gender = st.selectbox("Gender", ["Female", "Male"])
+    senior = st.selectbox("Senior citizen", [0, 1])
+    partner = st.selectbox("Has partner?", ["No", "Yes"])
+    dependents = st.selectbox("Has dependents?", ["No", "Yes"])
+    tenure = st.slider("Tenure (months)", 0, 72, 12)
+    phone = st.selectbox("Phone service", ["No", "Yes"])
+    multiple_lines = st.selectbox(
+        "Multiple lines",
+        ["No", "Yes", "No phone service"]
+    )
+    internet = st.selectbox(
+        "Internet service",
+        ["DSL", "Fiber optic", "No"]
+    )
+    online_security = st.selectbox(
+        "Online security",
+        ["No", "Yes", "No internet service"]
+    )
+    online_backup = st.selectbox(
+        "Online backup",
+        ["No", "Yes", "No internet service"]
+    )
 
-# encode like training
-input_data = pd.get_dummies(input_data)
+with col2:
+    device_protection = st.selectbox(
+        "Device protection",
+        ["No", "Yes", "No internet service"]
+    )
+    tech_support = st.selectbox(
+        "Tech support",
+        ["No", "Yes", "No internet service"]
+    )
+    streaming_tv = st.selectbox(
+        "Streaming TV",
+        ["No", "Yes", "No internet service"]
+    )
+    streaming_movies = st.selectbox(
+        "Streaming movies",
+        ["No", "Yes", "No internet service"]
+    )
+    contract = st.selectbox(
+        "Contract",
+        ["Month-to-month", "One year", "Two year"]
+    )
+    paperless = st.selectbox(
+        "Paperless billing",
+        ["No", "Yes"]
+    )
+    payment = st.selectbox(
+        "Payment method",
+        [
+            "Bank transfer (automatic)",
+            "Credit card (automatic)",
+            "Electronic check",
+            "Mailed check"
+        ]
+    )
+    monthly_charges = st.number_input(
+        "Monthly charges", min_value=0.0, value=50.0
+    )
+    total_charges = st.number_input(
+        "Total charges", min_value=0.0, value=1000.0
+    )
 
-# align columns
-input_data = input_data.reindex(columns=model_columns, fill_value=0)
+if st.button("Predict Churn", type="primary"):
 
-# scale
-input_scaled = scaler.transform(input_data)
+    raw_input = pd.DataFrame([{
+        "gender": gender,
+        "SeniorCitizen": senior,
+        "Partner": partner,
+        "Dependents": dependents,
+        "tenure": tenure,
+        "PhoneService": phone,
+        "MultipleLines": multiple_lines,
+        "InternetService": internet,
+        "OnlineSecurity": online_security,
+        "OnlineBackup": online_backup,
+        "DeviceProtection": device_protection,
+        "TechSupport": tech_support,
+        "StreamingTV": streaming_tv,
+        "StreamingMovies": streaming_movies,
+        "Contract": contract,
+        "PaperlessBilling": paperless,
+        "PaymentMethod": payment,
+        "MonthlyCharges": monthly_charges,
+        "TotalCharges": total_charges
+    }])
 
-# -----------------------
-# PREDICTION
-# -----------------------
+    # Recover the categorical levels used in training.
+    training_data = pd.read_csv("data.csv")
 
-if st.button("Predict Churn"):
+    categorical_columns = raw_input.select_dtypes(
+        include=["object"]
+    ).columns
 
-    prediction = model.predict(input_scaled)[0]
-    prob = model.predict_proba(input_scaled)[0][1]
+    for column in categorical_columns:
+        categories = sorted(
+            training_data[column].dropna().unique()
+        )
+        raw_input[column] = pd.Categorical(
+            raw_input[column],
+            categories=categories
+        )
 
-    st.subheader("Prediction Result")
+    # Match training encoding: get_dummies(drop_first=True).
+    encoded_input = pd.get_dummies(
+        raw_input, drop_first=True
+    )
 
-    # business logic display
-    if prob > 0.7:
-        st.error(f"High Risk of Churn ❌ ({prob:.2f})")
-        st.write("👉 Action: Offer retention incentives or customer support.")
-    elif prob > 0.4:
-        st.warning(f"Moderate Risk ⚠️ ({prob:.2f})")
-        st.write("👉 Action: Monitor and engage with the customer.")
+    encoded_input = encoded_input.reindex(
+        columns=model_columns, fill_value=0
+    ).astype(float)
+
+    scaled_input = scaler.transform(encoded_input)
+
+    churn_index = list(model.classes_).index(1)
+    probability = model.predict_proba(scaled_input)[0][
+        churn_index
+    ]
+
+    st.subheader("Prediction result")
+    st.metric("Estimated churn probability", f"{probability:.1%}")
+
+    if probability >= 0.7:
+        st.error("High churn risk")
+        st.write("Consider proactive customer outreach.")
+    elif probability >= 0.4:
+        st.warning("Moderate churn risk")
+        st.write("Consider monitoring customer satisfaction.")
     else:
-        st.success(f"Low Risk ✅ ({prob:.2f})")
-        st.write("👉 Action: Customer likely to stay.")
+        st.success("Low churn risk")
+        st.write("No immediate retention intervention suggested.")
 
-    # optional debug info (good for demo)
-    with st.expander("See Input Data"):
-        st.write(input_data)
+    st.caption(
+        "Risk bands are illustrative and have not yet "
+        "been validated as business decision thresholds."
+    )
+
+    with st.expander("View customer inputs"):
+        st.dataframe(raw_input)
