@@ -89,6 +89,17 @@ The app allows users to:
 - Receive suggested business actions  
 
 ---
+### 📸 Dashboard Preview
+
+**Customer Input Interface**
+
+![Customer Churn Dashboard](Screenshot%202026-10-18%20at%2016.00.08.png)
+
+**Churn Prediction Result**
+
+![Churn Prediction Result](Screenshot%202026-10-18%20at%2016.00.18.png)
+
+---
 
 ## ⚙️ How to Run the App
 
