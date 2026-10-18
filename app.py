@@ -35,40 +35,55 @@ with col1:
     dependents = st.selectbox("Has dependents?", ["No", "Yes"])
     tenure = st.slider("Tenure (months)", 0, 72, 12)
     phone = st.selectbox("Phone service", ["No", "Yes"])
-    multiple_lines = st.selectbox(
-        "Multiple lines",
-        ["No", "Yes", "No phone service"]
-    )
+
+    if phone == "No":
+        multiple_lines = "No phone service"
+        st.info("Multiple lines: No phone service")
+    else:
+        multiple_lines = st.selectbox(
+            "Multiple lines",
+            ["No", "Yes"]
+        )
+
     internet = st.selectbox(
         "Internet service",
         ["DSL", "Fiber optic", "No"]
     )
-    online_security = st.selectbox(
-        "Online security",
-        ["No", "Yes", "No internet service"]
-    )
-    online_backup = st.selectbox(
-        "Online backup",
-        ["No", "Yes", "No internet service"]
-    )
+
+    if internet == "No":
+        online_security = "No internet service"
+        online_backup = "No internet service"
+        st.info("Online security and backup: No internet service")
+    else:
+        online_security = st.selectbox(
+            "Online security",
+            ["No", "Yes"]
+        )
+        online_backup = st.selectbox(
+            "Online backup",
+            ["No", "Yes"]
+        )
 
 with col2:
-    device_protection = st.selectbox(
-        "Device protection",
-        ["No", "Yes", "No internet service"]
-    )
-    tech_support = st.selectbox(
-        "Tech support",
-        ["No", "Yes", "No internet service"]
-    )
-    streaming_tv = st.selectbox(
-        "Streaming TV",
-        ["No", "Yes", "No internet service"]
-    )
-    streaming_movies = st.selectbox(
-        "Streaming movies",
-        ["No", "Yes", "No internet service"]
-    )
+    if internet == "No":
+        device_protection = "No internet service"
+        tech_support = "No internet service"
+        streaming_tv = "No internet service"
+        streaming_movies = "No internet service"
+        st.info("Other internet-dependent services: No internet service")
+    else:
+        device_protection = st.selectbox(
+            "Device protection", ["No", "Yes"]
+        )
+        tech_support = st.selectbox(
+            "Tech support", ["No", "Yes"]
+        )
+        streaming_tv = st.selectbox(
+            "Streaming TV", ["No", "Yes"]
+        )
+        streaming_movies = st.selectbox(
+            "Streaming movies", ["No", "Yes"]
+        )
     contract = st.selectbox(
         "Contract",
         ["Month-to-month", "One year", "Two year"]
